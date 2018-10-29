@@ -31,6 +31,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
+import br.ufrn.lets.crashawaredev.verifier.NullPointerVerifier;
 import br.ufrn.lets.exceptionexpert.ast.ParseAST;
 import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
 import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
@@ -167,17 +168,17 @@ public class StartupClass implements IStartup {
 				rm.setMessage("Este método esteve presente " + occurrences + " vezes em stack traces de falhas nos últimos 30 dias.");
 				
 				rm.setLineNumber(astRoot.getLineNumber(m.getMethodDeclaration().getStartPosition()));
-				rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+				rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
 				messages.add(rm);
 			}
 		}
 		
-		//Rule 1
-//		ImproperThrowingVerifier improperThrowingVerifier = new ImproperThrowingVerifier(astRep, log);
-//		List<ReturnMessage> verify1 = improperThrowingVerifier.verify();
-//		messages.addAll(verify1);
-//		int totalImproperThrowingVerifier = verify1.size();
-//		totalMessages += totalImproperThrowingVerifier;
+		// Potential NullPointers
+		NullPointerVerifier nullPointerVerifier = new NullPointerVerifier(astRep, log);
+		List<ReturnMessage> verify1 = nullPointerVerifier.verify();
+		messages.addAll(verify1);
+		int totalImproperThrowingVerifier = verify1.size();
+		totalMessages += totalImproperThrowingVerifier;
 //
 //		//Rule 3
 //		ImproperHandlingVerifier improperHandlingVerifier = new ImproperHandlingVerifier(astRep, log);

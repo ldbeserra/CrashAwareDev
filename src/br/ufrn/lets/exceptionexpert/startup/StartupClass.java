@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
+import br.ufrn.lets.crashawaredev.verifier.HelperVerifier;
 import br.ufrn.lets.crashawaredev.verifier.NullPointerVerifier;
 import br.ufrn.lets.exceptionexpert.ast.ParseAST;
 import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
@@ -175,6 +176,13 @@ public class StartupClass implements IStartup {
 		messages.addAll(verify1);
 		int totalImproperThrowingVerifier = verify1.size();
 		totalMessages += totalImproperThrowingVerifier;
+		
+		// Helpers com com potenciais NPE
+		HelperVerifier helperVerifier = new HelperVerifier(astRep, log);
+		List<ReturnMessage> verify2 = helperVerifier.verify();
+		messages.addAll(verify2);
+		int totalHelperVerifier = verify2.size();
+		totalMessages += totalHelperVerifier;
 //
 //		//Rule 3
 //		ImproperHandlingVerifier improperHandlingVerifier = new ImproperHandlingVerifier(astRep, log);

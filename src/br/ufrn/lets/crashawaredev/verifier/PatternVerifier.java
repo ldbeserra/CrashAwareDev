@@ -19,7 +19,7 @@ public abstract class PatternVerifier {
 	
 	private ILog log;
 	
-	protected abstract List<ReturnMessage> verify();
+	public abstract List<ReturnMessage> verify();
 	
 	public PatternVerifier(ASTExceptionRepresentation astRep, ILog log) {
 		this.astRep = astRep;

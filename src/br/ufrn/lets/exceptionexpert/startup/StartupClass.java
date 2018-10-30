@@ -18,11 +18,7 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -57,7 +53,7 @@ public class StartupClass implements IStartup {
 		    @Override
 		    public void run() {
 		    	
-		    	log.log(new Status(Status.INFO, PLUGIN_LOG_IDENTIFIER, "INFO - Initializing ExceptionPolicyExpert Plug-in..."));
+		    	log.log(new Status(Status.INFO, PLUGIN_LOG_IDENTIFIER, "INFO - Initializing CrashAwareDev Plug-in..."));
 		    	
 		    	IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			    IEditorPart part = page.getActiveEditor();
@@ -160,12 +156,12 @@ public class StartupClass implements IStartup {
 			String methodName = className + "." + m.getMethodDeclaration().getName();
 			
 			int occurrences = 11;
-			// TODO: buscar ocorrências do método nos stacks do elasticsearch
+			// TODO: buscar ocorrÃªncias do mÃ©todo nos stacks do elasticsearch
 			
 			if(occurrences > 10) {
 				ReturnMessage rm = new ReturnMessage();
 				
-				rm.setMessage("Este método esteve presente " + occurrences + " vezes em stack traces de falhas nos últimos 30 dias.");
+				rm.setMessage("Este mÃ©todo esteve presente " + occurrences + " vezes em stack traces de falhas nos Ãºltimos 30 dias.");
 				
 				rm.setLineNumber(astRoot.getLineNumber(m.getMethodDeclaration().getStartPosition()));
 				rm.setMarkerSeverity(IMarker.SEVERITY_INFO);

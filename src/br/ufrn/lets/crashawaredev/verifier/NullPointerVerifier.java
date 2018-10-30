@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.internal.compiler.ast.ReturnStatement;
 
 import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
 import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
@@ -29,30 +32,36 @@ public class NullPointerVerifier extends PatternVerifier{
 		
 		for(MethodRepresentation method : methods) {
 			
-			List<Statement> stmts = method.getMethodDeclaration().getBody().statements();
+			String methodBodyString = method.getMethodDeclaration().getBody().statements().toString();
 			
-			List<VariableDeclarationStatement> findByPKStatements = new ArrayList<>();
-			
-			for(Object stmt : stmts) {
-				if(stmt instanceof VariableDeclarationStatement && isFindByPKDeclaration(stmt))
-					findByPKStatements.add((VariableDeclarationStatement) stmt);
-			}
-			
-			for(VariableDeclarationStatement varStmt : findByPKStatements) {
-				String varName = ((VariableDeclarationFragment) varStmt.fragments().get(0)).getName().toString();
-				// TODO
-//				method.getMethodDeclaration().getpos
+			for(VariableDeclarationStatement varStmt : method.getVariableDeclarationsStmt()) {
+				
+				if(isFindByPKDeclaration(varStmt)) {
+					List<VariableDeclarationFragment> fragments = varStmt.fragments();
+					String varName = fragments.get(0).getName().toString();
+					
+					if(!methodBodyString.contains(varName + " != null") && !methodBodyString.contains(varName + "!=null")) {
+						
+						ReturnMessage rm = new ReturnMessage();
+						rm.setMessage("PROBLEMA");
+						rm.setLineNumber(astRep.getAstRoot().getLineNumber(varStmt.getStartPosition()));
+						rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+						messages.add(rm);
+						
+					}
+				}
+				
 			}
 			
 		}
 		
-		return null;
+		return messages;
 	}
 	
 	private boolean isFindByPKDeclaration(Object stmt) {
 		final String WHITESPACE = "[ \t\n\r\f]";
 		
-		Pattern pattern = Pattern.compile(".*" + WHITESPACE + "+.*=.*findByPrimaryKey.*");
+		Pattern pattern = Pattern.compile(".*" + WHITESPACE + ".*=.*findByPrimaryKey.*;");
 		Matcher matcher = pattern.matcher(stmt.toString());
 		if(matcher.find())
 			return true;

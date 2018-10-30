@@ -106,4 +106,5 @@ public class ASTExceptionRepresentation {
 	public void setNumberOfCatchStatements(int numberOfCatchStatements) {
 		this.numberOfCatchStatements = numberOfCatchStatements;
 	}
+
 }

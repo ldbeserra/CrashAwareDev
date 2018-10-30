@@ -13,6 +13,9 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
 import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
@@ -87,6 +90,11 @@ public class ParseAST {
 			
 			public boolean visit(CatchClause node) {
 				lastMethod.getCatchClauses().add(node);
+				return true;
+			}
+			
+			public boolean visit(VariableDeclarationStatement node) {
+				lastMethod.getVariableDeclarationsStmt().add(node);
 				return true;
 			}
 			

@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class MethodRepresentation {
 
@@ -16,10 +18,13 @@ public class MethodRepresentation {
 	private List<CatchClause> catchClauses;
 
 	private List<ThrowStatement> throwStatements;
+
+	private List<VariableDeclarationStatement> variableDeclarationsStmt;
 	
 	public MethodRepresentation() {
 		setCatchClauses(new ArrayList<CatchClause>());
 		throwStatements = new ArrayList<ThrowStatement>();
+		variableDeclarationsStmt = new ArrayList<VariableDeclarationStatement>();
 	}
 
 	public MethodDeclaration getMethodDeclaration() {
@@ -54,5 +59,12 @@ public class MethodRepresentation {
 		this.astRep = astRep;
 	}
 
+	public List<VariableDeclarationStatement> getVariableDeclarationsStmt() {
+		return variableDeclarationsStmt;
+	}
+
+	public void setVariableDeclarationsStmt(List<VariableDeclarationStatement> variableDeclarationsStmt) {
+		this.variableDeclarationsStmt = variableDeclarationsStmt;
+	}
 	
 }

@@ -23,6 +23,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStartup;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
@@ -50,6 +51,7 @@ public class StartupClass implements IStartup {
 	
 	@Override
 	public void earlyStartup() {
+		
 		Display.getDefault().asyncExec(new Runnable() {
 		    @Override
 		    public void run() {

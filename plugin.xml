@@ -17,4 +17,18 @@
       </super>
 	</extension>
 	
+	<extension point="org.eclipse.ui.views">
+		<category
+            name="Crash Aware Dev"
+            id="br.ufrn.lets.crashawaredev">
+      </category>
+      
+      <view
+            name="Query Crashes from Kibana"
+            category="br.ufrn.lets.crashawaredev"
+            class="br.ufrn.lets.crashawaredev.view.CrashView"
+            id="br.ufrn.lets.crashawaredev.view.CrashViewId">
+      </view>
+	</extension>
+	
 </plugin>

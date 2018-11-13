@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ExceptionExpert
-Bundle-SymbolicName: br.ufrn.lets.exceptionExpert;singleton:=true
+Bundle-Name: CrashAwareDev
+Bundle-SymbolicName: br.ufrn.lets.crashawaredev;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: br.ufrn.lets.exceptionexpert.startup.Activator
 Require-Bundle: org.eclipse.ui,
@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.9.1",
  org.eclipse.jdt.core;bundle-version="3.10.2",
  org.eclipse.jdt.ui;bundle-version="3.10.2"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: target/lib/

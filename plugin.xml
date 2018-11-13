@@ -7,8 +7,8 @@
     </extension>
     
     <extension point="org.eclipse.core.resources.markers" 
-    			id="br.ufrn.lets.view.ExceptionPolicyExpertId"
-  			    name="ExceptionPolicyExpert">
+    			id="br.ufrn.lets.view.CrashAwareDevId"
+  			    name="CrashAwareDev">
 		<super type="org.eclipse.core.resources.problemmarker"/>
 		<persistent value="true"/>
 		<attribute name="description"/>
@@ -21,7 +21,7 @@
 		<category
             name="Crash Aware Dev"
             id="br.ufrn.lets.crashawaredev">
-      </category>
+      	</category>
       
       <view
             name="Query Crashes from Kibana"

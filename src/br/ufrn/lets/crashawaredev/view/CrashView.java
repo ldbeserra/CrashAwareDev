@@ -1,5 +1,6 @@
 package br.ufrn.lets.crashawaredev.view;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -133,7 +134,14 @@ public class CrashView extends ViewPart {
 	  }
 	
 	private void search(boolean doLog){
-		List<Crash> crashes = CrashProvider.INSTANCE.getCrashes();
+//		List<Crash> crashes = CrashProvider.INSTANCE.getCrashes();
+		List<Crash> crashes = null;
+		try {
+			crashes = CrashProvider.INSTANCE.getCrashesByClassName("teste");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		viewer.setInput(crashes);
 	}
 

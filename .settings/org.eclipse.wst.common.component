@@ -2,6 +2,7 @@
     <wb-module deploy-name="CrashAwareDev-0.0.1-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <property name="context-root" value="CrashAwareDev"/>
         <property name="java-output-path" value="/CrashAwareDev/target/classes"/>
     </wb-module>

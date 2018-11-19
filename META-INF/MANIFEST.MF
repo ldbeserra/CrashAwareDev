@@ -15,4 +15,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui;bundle-version="3.10.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: target/lib/
+Bundle-ClassPath: lib/sinfo-arq-data-0.0.49.jar,
+ lib/sinfo-arq-data-elasticsearch-0.0.49.jar,
+ lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT-sources.jar,
+ lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT.jar,
+ lib/sinfo-arq-main-0.0.49.jar,
+ lib/commons-logging-1.2.jar,
+ lib/httpclient-4.3.6.jar,
+ lib/httpcore-4.3.3.jar

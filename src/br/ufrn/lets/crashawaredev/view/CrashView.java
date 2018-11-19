@@ -81,7 +81,7 @@ public class CrashView extends ViewPart {
 	    	@Override
 	    	public String getText(Object element) {
 	    		Crash c = (Crash) element;
-	    		return c.getClassName();
+	    		return c.getMensagem_excecao();
 	    	}
 	    });
 	    
@@ -90,7 +90,7 @@ public class CrashView extends ViewPart {
 	    	@Override
 	    	public String getText(Object element) {
 	    		Crash c = (Crash) element;
-	    		return c.getTrace();
+	    		return c.getMensagem_excecao();
 	    	}
 	    });
 	    
@@ -99,7 +99,7 @@ public class CrashView extends ViewPart {
 	    	@Override
 	    	public String getText(Object element) {
 	    		Crash c = (Crash) element;
-	    		return c.getRootCause();
+	    		return c.getMensagem_excecao();
 	    	}
 	    });
 	    
@@ -108,7 +108,7 @@ public class CrashView extends ViewPart {
 	    	@Override
 	    	public String getText(Object element) {
 	    		Crash c = (Crash) element;
-	    		return c.getDate();
+	    		return c.getMensagem_excecao();
 	    	}
 	    });
 	    
@@ -117,7 +117,7 @@ public class CrashView extends ViewPart {
 	    	@Override
 	    	public String getText(Object element) {
 	    		Crash c = (Crash) element;
-	    		return c.getLink();
+	    		return c.getMensagem_excecao();
 	    	}
 	    });
 	}
@@ -134,12 +134,10 @@ public class CrashView extends ViewPart {
 	  }
 	
 	private void search(boolean doLog){
-//		List<Crash> crashes = CrashProvider.INSTANCE.getCrashes();
 		List<Crash> crashes = null;
 		try {
-			crashes = CrashProvider.INSTANCE.getCrashesByClassName("teste");
+			crashes = CrashProvider.INSTANCE.getCrashesByClassName("AWcss7do5B0ps0XvbB1q");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		viewer.setInput(crashes);

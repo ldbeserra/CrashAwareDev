@@ -5,7 +5,14 @@ import br.ufrn.lets.crashawaredev.model.SearchForm;
 
 public class QueryConsumer implements GeradorQueryElasticsearch  {
 
-	private final String TEMPLATE_TERM = "{\"term\": {\"%s\": \"%s\"}},\n";
+	private final String TEMPLATE_TERM = "{\n" + 
+			"  \"query\": { \n" + 
+			"    \"bool\": { \n" + 
+			"      \"must\": \n" + 
+			"        { \"match\": { \"%s\": \"%s\"}} \n" + 
+			"    }\n" + 
+			"  }\n" + 
+			"}";
 	
 	private SearchForm searchForm;
 	
@@ -19,7 +26,7 @@ public class QueryConsumer implements GeradorQueryElasticsearch  {
 		StringBuilder criteriosConsulta = new StringBuilder();
 		
 		if(exists(searchForm.getClassName()))
-			criteriosConsulta.append(String.format(TEMPLATE_TERM, "uniqueId", searchForm.getClassName()));
+			criteriosConsulta.append(String.format(TEMPLATE_TERM, "_id", searchForm.getClassName()));
 		
 		return criteriosConsulta.toString();
 	}

@@ -235,7 +235,7 @@ public class StartupClass implements IStartup {
 	private static void deleteMarkers(IResource res) throws CoreException {
 		IMarker[] problems = null;
 		int depth = IResource.DEPTH_INFINITE;
-		problems = res.getProject().findMarkers("br.ufrn.lets.view.ExceptionPolicyExpertId", true, depth);
+		problems = res.getProject().findMarkers("br.ufrn.lets.view.CrashAwareDevId", true, depth);
 
 		for (int i = 0; i < problems.length; i++) {
 			problems[i].delete();
@@ -254,7 +254,7 @@ public class StartupClass implements IStartup {
 			throws CoreException, BadLocationException {
 		
 		IMarker marker = null;
-		marker = res.createMarker("br.ufrn.lets.view.ExceptionPolicyExpertId");
+		marker = res.createMarker("br.ufrn.lets.view.CrashAwareDevId");
 		marker.setAttribute(IMarker.SEVERITY, rm.getMarkerSeverity());
 		marker.setAttribute(IMarker.TEXT, rm.getMessage());
 		marker.setAttribute(IMarker.MESSAGE, rm.getMessage());

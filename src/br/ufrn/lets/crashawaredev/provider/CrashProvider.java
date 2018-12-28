@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufrn.lets.crashawaredev.model.Crash;
+import br.ufrn.lets.crashawaredev.model.ResultConsume;
 import br.ufrn.lets.crashawaredev.model.SearchForm;
 import br.ufrn.lets.crashawaredev.search.QueryExecute;
 
@@ -14,13 +15,14 @@ public enum CrashProvider {
 	
 	private List<Crash> crashes;
 
-	private final String host = "http://hermod-es01-sustentacao.info.ufrn.br:9200";
+	private final String host = "http://elasticsearch-manutencao.info.ufrn.br:9200";
 	
-	public List<Crash> getCrashesByClassName(String className) throws IOException{
+	public ResultConsume getCrashesByClassName(String className) throws IOException{
 		SearchForm form = new SearchForm();
 		form.setClassName(className);
-		List<Crash> result = new QueryExecute(host, "indice_log_erro_detalhado-*", Crash.class, form).executarQueryPlain();
-		return result;
+		
+		ResultConsume resultConsume = new QueryExecute(host, "indice_log_erro_detalhado_novo_teste-2017", ResultConsume.class, form).executarQueryPlain();
+		return resultConsume;
 	}
 	
 	private CrashProvider() {

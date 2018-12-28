@@ -1,6 +1,8 @@
 package br.ufrn.lets.crashawaredev.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -19,8 +21,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
+import org.joda.time.DateTimeUtils;
 
 import br.ufrn.lets.crashawaredev.model.Crash;
+import br.ufrn.lets.crashawaredev.model.ResultConsume;
+import br.ufrn.lets.crashawaredev.model.ResultConsumeItem;
 import br.ufrn.lets.crashawaredev.provider.CrashProvider;
 
 public class CrashView extends ViewPart {
@@ -73,51 +78,56 @@ public class CrashView extends ViewPart {
 	}
 	
 	private void createColumns() {
-		String[] columns = {"Class", "Trace", "Root cause","Date", "Link"};
+		String[] columns = {"Class", "Trace", "Exception", "Date", "Link"};
 	    int[] bounds = {200, 300, 200, 50, 100};
 	    
+	    // Class name
 	    TableViewerColumn col = createTableViewerColumn(columns[0], bounds[0], 0);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		Crash c = (Crash) element;
-	    		return c.getMensagem_excecao();
+	    		ResultConsumeItem item = (ResultConsumeItem) element;
+	    		return "";
 	    	}
 	    });
 	    
+	    // Trace
 	    col = createTableViewerColumn(columns[1], bounds[1], 1);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		Crash c = (Crash) element;
-	    		return c.getMensagem_excecao();
+	    		ResultConsumeItem item = (ResultConsumeItem) element;
+	    		return item.getMensagemExcecao();
 	    	}
 	    });
 	    
+	    // Root cause
 	    col = createTableViewerColumn(columns[2], bounds[2], 2);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		Crash c = (Crash) element;
-	    		return c.getMensagem_excecao();
+	    		ResultConsumeItem item = (ResultConsumeItem) element;
+	    		return item.getClasseExcecao();
 	    	}
 	    });
 	    
+	    // Date
 	    col = createTableViewerColumn(columns[3], bounds[3], 3);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		Crash c = (Crash) element;
-	    		return c.getMensagem_excecao();
+	    		ResultConsumeItem item = (ResultConsumeItem) element;
+	    		return item.getDataHoraOperacao();
 	    	}
 	    });
 	    
+	    // Link
 	    col = createTableViewerColumn(columns[4], bounds[4], 4);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		Crash c = (Crash) element;
-	    		return c.getMensagem_excecao();
+	    		ResultConsumeItem item = (ResultConsumeItem) element;
+	    		return "link";
 	    	}
 	    });
 	}
@@ -134,13 +144,13 @@ public class CrashView extends ViewPart {
 	  }
 	
 	private void search(boolean doLog){
-		List<Crash> crashes = null;
+		ResultConsume result = null;
 		try {
-			crashes = CrashProvider.INSTANCE.getCrashesByClassName("AWcss7do5B0ps0XvbB1q");
+			result = CrashProvider.INSTANCE.getCrashesByClassName(searchText.getText());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		viewer.setInput(crashes);
+		viewer.setInput(result.getHits());
 	}
 
 	@Override

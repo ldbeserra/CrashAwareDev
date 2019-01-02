@@ -24,41 +24,44 @@ public class HelperVerifier extends PatternVerifier {
 		
 		List<ReturnMessage> messages = new ArrayList<ReturnMessage>();
 		
-		String className = astRep.getTypeDeclaration().getName().toString();
-		
-		if(className.endsWith("Helper") || className.endsWith("Util") || className.endsWith("Utils")) {
+		if(astRep.getTypeDeclaration() != null) {
 			
-			List<MethodRepresentation> methods = astRep.getMethods();
+			String className = astRep.getTypeDeclaration().getName().toString();
 			
-			for(MethodRepresentation method : methods) {
+			if(className.endsWith("Helper") || className.endsWith("Util") || className.endsWith("Utils")) {
 				
-				String methodBodyString = method.getMethodDeclaration().getBody().statements().toString();
+				List<MethodRepresentation> methods = astRep.getMethods();
 				
-				List<SingleVariableDeclaration> varsToValidate = new ArrayList<>();
-				
-				for(Object param : method.getMethodDeclaration().parameters()) {
+				for(MethodRepresentation method : methods) {
 					
-					SingleVariableDeclaration var = (SingleVariableDeclaration) param;
+					String methodBodyString = method.getMethodDeclaration().getBody().statements().toString();
 					
-					if(!argumentValidated(var, methodBodyString)) {
-						varsToValidate.add(var);
+					List<SingleVariableDeclaration> varsToValidate = new ArrayList<>();
+					
+					for(Object param : method.getMethodDeclaration().parameters()) {
+						
+						SingleVariableDeclaration var = (SingleVariableDeclaration) param;
+						
+						if(!argumentValidated(var, methodBodyString)) {
+							varsToValidate.add(var);
+						}
 					}
-				}
-				
-				if(!varsToValidate.isEmpty()) {
 					
-					String varStr = "(";
-					for(SingleVariableDeclaration svar : varsToValidate) {
-						varStr += svar.toString() + ", ";
+					if(!varsToValidate.isEmpty()) {
+						
+						String varStr = "(";
+						for(SingleVariableDeclaration svar : varsToValidate) {
+							varStr += svar.toString() + ", ";
+						}
+						varStr = varStr.substring(0, varStr.length()-2) + ")";	
+											
+						ReturnMessage rm = new ReturnMessage();
+						rm.setMessage("Os argumentos deste método devem ser validados para evitar potenciais null pointers."
+								+ "\nValide cada um dos seguintes argumentos antes de referenciá-los: " + varStr);
+						rm.setLineNumber(astRep.getAstRoot().getLineNumber(method.getMethodDeclaration().getStartPosition()));
+						rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+						messages.add(rm);
 					}
-					varStr = varStr.substring(0, varStr.length()-2) + ")";	
-										
-					ReturnMessage rm = new ReturnMessage();
-					rm.setMessage("Os argumentos deste método devem ser validados para evitar potenciais null pointers."
-							+ "\nValide cada um dos seguintes argumentos antes de referenciá-los: " + varStr);
-					rm.setLineNumber(astRep.getAstRoot().getLineNumber(method.getMethodDeclaration().getStartPosition()));
-					rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
-					messages.add(rm);
 				}
 			}
 		}

@@ -15,8 +15,9 @@ public class QueryExecute extends QueryElasticsearchTemplateBase{
 		this.searchForm = searchForm;
 	}
 	
-	public QueryExecute(String urlConexaoElasticsearch, String nomeIndice, Class classe) {
-		super(urlConexaoElasticsearch, nomeIndice, classe);
+	public QueryExecute(String urlConexaoElasticsearch, String nomeIndice, Class classe, SearchForm searchForm, String nomeFieldResultadoJson) {
+		super(urlConexaoElasticsearch, nomeIndice, classe, nomeFieldResultadoJson);
+		this.searchForm = searchForm;
 	}
 
 	@Override

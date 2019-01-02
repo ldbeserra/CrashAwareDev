@@ -23,44 +23,48 @@ public class GetSetPresentVerifier extends PatternVerifier {
 		
 		List<ReturnMessage> messages = new ArrayList<ReturnMessage>();
 		
-		String className = astRep.getTypeDeclaration().getName().toString();
-		
-		if(className.endsWith("MBean") || className.endsWith("Form")) {
+		if(astRep.getTypeDeclaration() != null) {
 			
-			for(FieldRepresentation field : astRep.getFields()) {
-
-				if(field.getFieldDeclaration().fragments() != null &&  field.getFieldDeclaration().fragments().size() > 0) {
+			String className = astRep.getTypeDeclaration().getName().toString();
+			
+			if(className.endsWith("MBean") || className.endsWith("Form")) {
 				
-					if(field.getFieldDeclaration().getModifiers() == Modifier.PRIVATE) {
-
-						String fieldName = field.getFieldDeclaration().fragments().get(0).toString();
-						String getName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-						String setName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-						
-						boolean getFound = false;
-						boolean setFound = false;
-						
-						for(MethodRepresentation method : astRep.getMethods()) {
-						
-							if(method.getMethodDeclaration().getName().toString().equals(getName))
-								getFound = true;
+				for(FieldRepresentation field : astRep.getFields()) {
+	
+					if(field.getFieldDeclaration().fragments() != null &&  field.getFieldDeclaration().fragments().size() > 0) {
+					
+						if(field.getFieldDeclaration().getModifiers() == Modifier.PRIVATE) {
+	
+							String fieldName = field.getFieldDeclaration().fragments().get(0).toString();
+							String getName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+							String setName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 							
-							if(method.getMethodDeclaration().getName().toString().equals(setName))
-								setFound = true;
+							boolean getFound = false;
+							boolean setFound = false;
 							
-						}
-						
-						if(!getFound || !setFound) {
-							ReturnMessage rm = new ReturnMessage();
-							rm.setMessage("Variável private sem método get ou set associado.");
-							rm.setLineNumber(astRep.getAstRoot().getLineNumber(field.getFieldDeclaration().getStartPosition()));
-							rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
-							messages.add(rm);
+							for(MethodRepresentation method : astRep.getMethods()) {
+							
+								if(method.getMethodDeclaration().getName().toString().equals(getName))
+									getFound = true;
+								
+								if(method.getMethodDeclaration().getName().toString().equals(setName))
+									setFound = true;
+								
+							}
+							
+							if(!getFound || !setFound) {
+								ReturnMessage rm = new ReturnMessage();
+								rm.setMessage("Variável private sem método get ou set associado.");
+								rm.setLineNumber(astRep.getAstRoot().getLineNumber(field.getFieldDeclaration().getStartPosition()));
+								rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+								messages.add(rm);
+							}
 						}
 					}
+					
 				}
-				
 			}
+			
 		}
 		
 		return messages;

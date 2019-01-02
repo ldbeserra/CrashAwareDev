@@ -25,9 +25,9 @@ public class SearchHitsDeserializer<T> extends JsonDeserializer<List<T>> {
 
         ParameterizedType stringListType = (ParameterizedType) field.getGenericType();
         Class<?> stringListClass = (Class<?>) stringListType.getActualTypeArguments()[0];
-
+        
         CollectionType toValueType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, stringListClass);
-        return mapper.convertValue(node.findValues("_source"), toValueType);
+        return mapper.convertValue(node, toValueType);
     }
 
     public Field findField(String name, Class<?> c) {

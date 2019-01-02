@@ -8,11 +8,11 @@ public class RootCause {
 	
 	private Integer ocurrences;
 	
-	private Double rate;
+	private String rate;
 	
 	public RootCause() {}
 	
-	public RootCause(Integer order, String cause, Integer ocurrences, Double rate) {
+	public RootCause(Integer order, String cause, Integer ocurrences, String rate) {
 		this.order = order;
 		this.cause = cause;
 		this.ocurrences = ocurrences;
@@ -43,11 +43,11 @@ public class RootCause {
 		this.ocurrences = ocurrences;
 	}
 
-	public Double getRate() {
+	public String getRate() {
 		return rate;
 	}
 
-	public void setRate(Double rate) {
+	public void setRate(String rate) {
 		this.rate = rate;
 	}
 	

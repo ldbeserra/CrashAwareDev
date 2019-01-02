@@ -27,7 +27,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import br.ufrn.lets.crashawaredev.model.ResultConsume;
-import br.ufrn.lets.crashawaredev.model.ResultConsumeItem;
+import br.ufrn.lets.crashawaredev.model.Hits;
+import br.ufrn.lets.crashawaredev.model.SearchForm;
 import br.ufrn.lets.crashawaredev.provider.CrashProvider;
 
 public class CrashView extends ViewPart {
@@ -53,7 +54,7 @@ public class CrashView extends ViewPart {
 	    searchButton.setText("Search");
 	    searchButton.addSelectionListener(new SelectionAdapter() {
 	        public void widgetSelected(SelectionEvent event) {
-	        	search(true, true);
+	        	search(false, true);
 	        }
         });
 	    
@@ -71,7 +72,7 @@ public class CrashView extends ViewPart {
 	    	if(table.getSelection() != null && table.getSelection().length > 0) {
 		    	TableItem item = table.getSelection()[0];
 		    	if(item != null && item.getData() != null)
-		    		Program.launch(((ResultConsumeItem) item.getData()).getLink());
+		    		Program.launch(((Hits) item.getData()).getLink());
 	    	}
 	    });
 	    
@@ -93,7 +94,7 @@ public class CrashView extends ViewPart {
 				if(table.getSelection() != null && table.getSelection().length > 0) {
 			    	TableItem item = table.getSelection()[0];
 			    	if(item != null && item.getData() != null)
-			    		Program.launch(((ResultConsumeItem) item.getData()).getLink());
+			    		Program.launch(((Hits) item.getData()).getLink());
 		    	}
 			}
 	    });
@@ -129,8 +130,12 @@ public class CrashView extends ViewPart {
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return item.getMensagemExcecao();
+	    		Hits item = (Hits) element;
+	    		String msg = "";
+	    		if(item != null && item.getSource().getMensagemExcecao() != null) {
+	    			msg = item.getSource().getMensagemExcecao().replace("\n", " ").replaceAll("\t", " ");
+	    		}
+	    		return msg;
 	    	}
 	    });
 	    
@@ -139,8 +144,8 @@ public class CrashView extends ViewPart {
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return item.getClasseExcecao();
+	    		Hits item = (Hits) element;
+	    		return item.getSource().getClasseExcecao();
 	    	}
 	    });
 	    
@@ -149,8 +154,8 @@ public class CrashView extends ViewPart {
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return item.getRootCause();
+	    		Hits item = (Hits) element;
+	    		return item.getSource().getRootCause();
 	    	}
 	    });
 	    
@@ -159,8 +164,8 @@ public class CrashView extends ViewPart {
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
-	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return item.getDataHoraOperacao();
+	    		Hits item = (Hits) element;
+	    		return item.getSource().getDataHoraOperacao();
 	    	}
 	    });
 	    
@@ -182,8 +187,9 @@ public class CrashView extends ViewPart {
 		try {
 			if(allClasses)
 				result = CrashProvider.INSTANCE.getAllCrashes();
-			else
-				result = CrashProvider.INSTANCE.getCrashesByClassName(searchText.getText());
+			else {
+				result = CrashProvider.INSTANCE.getCrashesByTerm(searchText.getText());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

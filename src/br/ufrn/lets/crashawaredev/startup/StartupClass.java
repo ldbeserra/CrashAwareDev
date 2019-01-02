@@ -1,5 +1,6 @@
 package br.ufrn.lets.crashawaredev.startup;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -34,6 +36,7 @@ import br.ufrn.lets.crashawaredev.ast.ParseAST;
 import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
 import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;
 import br.ufrn.lets.crashawaredev.ast.model.ReturnMessage;
+import br.ufrn.lets.crashawaredev.provider.CrashProvider;
 import br.ufrn.lets.crashawaredev.verifier.PatternVerifier;
 
 public class StartupClass implements IStartup {
@@ -118,6 +121,8 @@ public class StartupClass implements IStartup {
 						    	log.log(new Status(Status.ERROR, PLUGIN_LOG_IDENTIFIER, "ERROR - The workspace does not have the file /src-gen/contract.xml, with ECL rules. Plug-in aborted. " + e.getLocalizedMessage()));
 								e.printStackTrace();
 								
+							} catch (IOException e) {
+								e.printStackTrace();
 							} 
 							
 						}
@@ -136,8 +141,9 @@ public class StartupClass implements IStartup {
 	/**
 	 * Method that calls the verifications
 	 * @param changedClass
+	 * @throws IOException 
 	 */
-	private void verifyPatterns(IResource changedClass) throws CoreException {
+	private void verifyPatterns(IResource changedClass) throws CoreException, IOException {
 
 		deleteMarkers(changedClass);
 		
@@ -150,28 +156,19 @@ public class StartupClass implements IStartup {
 
 		messages = new ArrayList<ReturnMessage>();
 		
-		int totalMessages = 0;
-		
 		String className = astRoot.getPackage().getName() + "." + astRoot.getTypeRoot().getElementName();
-		className = className.substring(0, className.length() - 5);
+		className = className.substring(0, className.length() - 5); 
 		
-//		List<MethodRepresentation> methods = astRep.getMethods();
-//		for(MethodRepresentation m : methods) {
-//			String methodName = className + "." + m.getMethodDeclaration().getName();
-//			
-//			int occurrences = 11;
-//			// TODO: buscar ocorrências do método nos stacks do elasticsearch
-//			
-//			if(occurrences > 10) {
-//				ReturnMessage rm = new ReturnMessage();
-//				
-//				rm.setMessage("Este método esteve presente " + occurrences + " vezes em stack traces de falhas nos últimos 30 dias.");
-//				
-//				rm.setLineNumber(astRoot.getLineNumber(m.getMethodDeclaration().getStartPosition()));
-//				rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
-//				messages.add(rm);
-//			}
-//		}
+		Long totalCrashes = CrashProvider.INSTANCE.getClassCrashCount(className);
+		
+		if(totalCrashes > 0 && !astRoot.types().isEmpty()) {
+			ReturnMessage rm = new ReturnMessage();
+			rm.setMessage("Esta classe esteve presente stack traces de falhas nos últimos 3 dias.");
+			
+			rm.setLineNumber(astRoot.getLineNumber( ((TypeDeclaration) astRoot.types().get(0)).getStartPosition()));
+			rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
+			messages.add(rm);
+		}
 		
 		// Recupera todas as classes do pacote verifier
 		Reflections reflections = new Reflections("br.ufrn.lets.crashawaredev.verifier");
@@ -187,7 +184,6 @@ public class StartupClass implements IStartup {
 				
 				List<ReturnMessage> msgs = instance.verify();
 				messages.addAll(msgs);
-				totalMessages +=  msgs.size();
 				
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResultConsumeItem {
+	
+	private static final String baseUrl = "http://kibana-producao.info.ufrn.br:5601/app/kibana#/doc/indice_log_erro_detalhado-*/indice_log_erro_detalhado-2018/log_erro_detalhado?id=";
 
     @JsonProperty("_id")
     private String id;
@@ -30,7 +32,7 @@ public class ResultConsumeItem {
     
     @JsonProperty("data_hora_operacao")
     private String dataHoraOperacao;
-
+    
 	public String getId() {
 		return id;
 	}
@@ -77,5 +79,9 @@ public class ResultConsumeItem {
 
 	public void setRootCause(String rootCause) {
 		this.rootCause = rootCause;
+	}
+
+	public String getLink() {
+		return baseUrl + id;
 	}
 }

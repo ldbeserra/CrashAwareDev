@@ -1,4 +1,4 @@
-package br.ufrn.lets.exceptionexpert.ast;
+package br.ufrn.lets.crashawaredev.ast;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -17,8 +18,9 @@ import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
-import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
-import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.FieldRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;
 
 public class ParseAST {
 
@@ -47,11 +49,11 @@ public class ParseAST {
 	 * @param astRoot
 	 * @return
 	 */
-	public static ASTExceptionRepresentation parseClassASTToExceptionRep(CompilationUnit astRoot) {
+	public static ASTRepresentation parseClassASTToARep(CompilationUnit astRoot) {
 		//Ref: http://www.programcreek.com/2012/06/insertadd-statements-to-java-source-code-by-using-eclipse-jdt-astrewrite/
 		//Ref: http://www.programcreek.com/java-api-examples/index.php?api=org.eclipse.jdt.core.dom.MethodDeclaration
 
-		final ASTExceptionRepresentation astRep = new ASTExceptionRepresentation();
+		final ASTRepresentation astRep = new ASTRepresentation();
 		
 		astRep.setAstRoot(astRoot);
 		
@@ -68,6 +70,15 @@ public class ParseAST {
 
 			public boolean visit(TypeDeclaration node) {
 				astRep.setTypeDeclaration(node);
+				return true;
+			}
+			
+			public boolean visit(FieldDeclaration node) {
+				FieldRepresentation fr = new FieldRepresentation();
+				fr.setFieldDeclaration(node);
+			
+				astRep.getFields().add(fr);
+				
 				return true;
 			}
 			

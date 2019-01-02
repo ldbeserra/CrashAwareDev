@@ -1,7 +1,9 @@
-package br.ufrn.lets.exceptionexpert.startup;
+package br.ufrn.lets.crashawaredev.startup;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IMarker;
@@ -23,21 +25,20 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStartup;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.reflections.Reflections;
 
-import br.ufrn.lets.crashawaredev.verifier.HelperVerifier;
-import br.ufrn.lets.crashawaredev.verifier.NullPointerVerifier;
-import br.ufrn.lets.exceptionexpert.ast.ParseAST;
-import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
-import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
-import br.ufrn.lets.exceptionexpert.models.ReturnMessage;
+import br.ufrn.lets.crashawaredev.ast.ParseAST;
+import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.ReturnMessage;
+import br.ufrn.lets.crashawaredev.verifier.PatternVerifier;
 
 public class StartupClass implements IStartup {
     
-	private static final String PLUGIN_LOG_IDENTIFIER = "br.ufrn.lets.exceptionExpert";
+	private static final String PLUGIN_LOG_IDENTIFIER = "br.ufrn.lets.CrashAwareDev";
 
 	protected final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -110,7 +111,7 @@ public class StartupClass implements IStartup {
 								//If there are changed files
 								for (IResource changedClass : changedClasses) {
 									//Call the verifier for each changed class
-									verifyHandlersAndSignalers(changedClass);
+									verifyPatterns(changedClass);
 								}
 								
 							} catch (CoreException e) {
@@ -136,7 +137,7 @@ public class StartupClass implements IStartup {
 	 * Method that calls the verifications
 	 * @param changedClass
 	 */
-	private void verifyHandlersAndSignalers(IResource changedClass) throws CoreException {
+	private void verifyPatterns(IResource changedClass) throws CoreException {
 
 		deleteMarkers(changedClass);
 		
@@ -145,7 +146,7 @@ public class StartupClass implements IStartup {
 		//AST Tree from changed class
 		CompilationUnit astRoot = ParseAST.parse(compilationUnit);
 		
-		ASTExceptionRepresentation astRep = ParseAST.parseClassASTToExceptionRep(astRoot);
+		ASTRepresentation astRep = ParseAST.parseClassASTToARep(astRoot);
 
 		messages = new ArrayList<ReturnMessage>();
 		
@@ -154,53 +155,45 @@ public class StartupClass implements IStartup {
 		String className = astRoot.getPackage().getName() + "." + astRoot.getTypeRoot().getElementName();
 		className = className.substring(0, className.length() - 5);
 		
-		List<MethodRepresentation> methods = astRep.getMethods();
-		for(MethodRepresentation m : methods) {
-			String methodName = className + "." + m.getMethodDeclaration().getName();
+//		List<MethodRepresentation> methods = astRep.getMethods();
+//		for(MethodRepresentation m : methods) {
+//			String methodName = className + "." + m.getMethodDeclaration().getName();
+//			
+//			int occurrences = 11;
+//			// TODO: buscar ocorrências do método nos stacks do elasticsearch
+//			
+//			if(occurrences > 10) {
+//				ReturnMessage rm = new ReturnMessage();
+//				
+//				rm.setMessage("Este método esteve presente " + occurrences + " vezes em stack traces de falhas nos últimos 30 dias.");
+//				
+//				rm.setLineNumber(astRoot.getLineNumber(m.getMethodDeclaration().getStartPosition()));
+//				rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
+//				messages.add(rm);
+//			}
+//		}
+		
+		// Recupera todas as classes do pacote verifier
+		Reflections reflections = new Reflections("br.ufrn.lets.crashawaredev.verifier");
+		Set<Class<? extends PatternVerifier>> allClasses = reflections.getSubTypesOf(PatternVerifier.class);
+		
+		// Executa a verificação de cada classe filha de PatternVerifier
+		for(Class<? extends PatternVerifier> verifier : allClasses) {
 			
-			int occurrences = 11;
-			// TODO: buscar ocorrências do método nos stacks do elasticsearch
-			
-			if(occurrences > 10) {
-				ReturnMessage rm = new ReturnMessage();
+			try {
 				
-				rm.setMessage("Este método esteve presente " + occurrences + " vezes em stack traces de falhas nos últimos 30 dias.");
+				Constructor constructor = verifier.getConstructor(new Class[] {ASTRepresentation.class, ILog.class});
+				PatternVerifier instance = (PatternVerifier) constructor.newInstance(new Object[] {astRep, log});
 				
-				rm.setLineNumber(astRoot.getLineNumber(m.getMethodDeclaration().getStartPosition()));
-				rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
-				messages.add(rm);
+				List<ReturnMessage> msgs = instance.verify();
+				messages.addAll(msgs);
+				totalMessages +=  msgs.size();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		
-		// Potential NullPointers
-		NullPointerVerifier nullPointerVerifier = new NullPointerVerifier(astRep, log);
-		List<ReturnMessage> verify1 = nullPointerVerifier.verify();
-		messages.addAll(verify1);
-		int totalImproperThrowingVerifier = verify1.size();
-		totalMessages += totalImproperThrowingVerifier;
-		
-		// Helpers com com potenciais NPE
-		HelperVerifier helperVerifier = new HelperVerifier(astRep, log);
-		List<ReturnMessage> verify2 = helperVerifier.verify();
-		messages.addAll(verify2);
-		int totalHelperVerifier = verify2.size();
-		totalMessages += totalHelperVerifier;
-//
-//		//Rule 3
-//		ImproperHandlingVerifier improperHandlingVerifier = new ImproperHandlingVerifier(astRep, log);
-//		List<ReturnMessage> verify2 = improperHandlingVerifier.verify();
-//		messages.addAll(verify2);
-//		int totalImproperHandlingVerifier = verify2.size();
-//		totalMessages += totalImproperHandlingVerifier;
-//
-		
-//		//Rule 4
-//		PossibleHandlersInformation possibleHandlersInformation = new PossibleHandlersInformation(astRep, log);
-//		List<ReturnMessage> verify3 = possibleHandlersInformation.verify();
-//		messages.addAll(verify3);
-//		int totalPossibleHandlersInformation = verify3.size();
-//		totalMessages += totalPossibleHandlersInformation;
-//
+			
 //		//Debug log for statistics metrics
 //	   	log.log(new Status(Status.INFO, PLUGIN_LOG_IDENTIFIER, 
 //	   			"INFO - Changed class: " + compilationUnit.getParent().getElementName() + "." +  compilationUnit.getElementName() +
@@ -232,7 +225,7 @@ public class StartupClass implements IStartup {
 	 * @param res Resource (class) to delete the marker
 	 * @throws CoreException 
 	 */
-	private static void deleteMarkers(IResource res) throws CoreException {
+	private void deleteMarkers(IResource res) throws CoreException {
 		IMarker[] problems = null;
 		int depth = IResource.DEPTH_INFINITE;
 		problems = res.getProject().findMarkers("br.ufrn.lets.view.CrashAwareDevId", true, depth);
@@ -250,7 +243,7 @@ public class StartupClass implements IStartup {
 	 * @throws CoreException
 	 * @throws BadLocationException 
 	 */
-	public static void createMarker(IResource res, ReturnMessage rm, ICompilationUnit compilationUnit)
+	public void createMarker(IResource res, ReturnMessage rm, ICompilationUnit compilationUnit)
 			throws CoreException, BadLocationException {
 		
 		IMarker marker = null;

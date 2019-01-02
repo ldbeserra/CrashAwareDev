@@ -14,6 +14,10 @@ public class QueryExecute extends QueryElasticsearchTemplateBase{
 		super(urlConexaoElasticsearch, nomeIndice, classe);
 		this.searchForm = searchForm;
 	}
+	
+	public QueryExecute(String urlConexaoElasticsearch, String nomeIndice, Class classe) {
+		super(urlConexaoElasticsearch, nomeIndice, classe);
+	}
 
 	@Override
 	public <T> List<T> executarQuery() throws IOException {

@@ -1,4 +1,4 @@
-package br.ufrn.lets.exceptionexpert.models;
+package br.ufrn.lets.crashawaredev.ast.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class MethodRepresentation {
 
-	private ASTExceptionRepresentation astRep;
+	private ASTRepresentation astRep;
 	
 	private MethodDeclaration methodDeclaration;
 	
@@ -51,11 +51,11 @@ public class MethodRepresentation {
 		this.catchClauses = catchClauses;
 	}
 
-	public ASTExceptionRepresentation getAstRep() {
+	public ASTRepresentation getAstRep() {
 		return astRep;
 	}
 
-	public void setAstRep(ASTExceptionRepresentation astRep) {
+	public void setAstRep(ASTRepresentation astRep) {
 		this.astRep = astRep;
 	}
 

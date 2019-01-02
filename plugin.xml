@@ -3,7 +3,7 @@
 <plugin>
    
 	<extension point="org.eclipse.ui.startup">
-   		<startup class="br.ufrn.lets.exceptionexpert.startup.StartupClass"/>
+   		<startup class="br.ufrn.lets.crashawaredev.startup.StartupClass"/>
     </extension>
     
     <extension point="org.eclipse.core.resources.markers" 
@@ -30,5 +30,47 @@
             id="br.ufrn.lets.crashawaredev.view.CrashViewId">
       </view>
 	</extension>
+	
+	<extension
+		point="org.eclipse.ui.commands">
+      <command
+            id="br.ufrn.lets.crashawaredev.view.RootCausesCommandID"
+            description="Find errors top root causes in project."
+            name="commandTopCauses">
+      </command>
+      <command
+            id="br.ufrn.lets.crashawaredev.view.FindCrashesCommandID"
+            description="Find last crashes from kibana."
+            name="commandFindCrashes">
+      </command>
+  	</extension>
+	
+	<extension point="org.eclipse.ui.menus">
+	  <menuContribution locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=additions">
+	     <menu id="CrashAwareDevId" label="CrashAwareDev"></menu>
+	  </menuContribution>
+	  <menuContribution locationURI="popup:CrashAwareDevId?after=additions">
+	     <command commandId="br.ufrn.lets.crashawaredev.view.RootCausesCommandID"
+	     		  defaultHandler="br.ufrn.lets.crashawaredev.handlers.RootCausesHandler"
+	           	  label="Show Top Root Causes">
+	     </command>
+	     <command commandId="br.ufrn.lets.crashawaredev.view.FindCrashesCommandID"
+	     		  defaultHandler="br.ufrn.lets.crashawaredev.handlers.FindCrashesHandler"
+	           	  label="Show Last Crashes">
+	     </command>
+	  </menuContribution>
+	</extension>
+	
+	<extension
+         point="org.eclipse.ui.handlers">
+         <handler
+            class="br.ufrn.lets.crashawaredev.handlers.RootCausesHandler"
+            commandId="br.ufrn.lets.crashawaredev.view.RootCausesCommandID">
+      	</handler>
+      	<handler
+            class="br.ufrn.lets.crashawaredev.handlers.FindCrashesHandler"
+            commandId="br.ufrn.lets.crashawaredev.view.FindCrashesCommandID">
+      	</handler>
+    </extension> 
 	
 </plugin>

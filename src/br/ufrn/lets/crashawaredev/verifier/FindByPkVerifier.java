@@ -13,13 +13,13 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.internal.compiler.ast.ReturnStatement;
 
-import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
-import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
-import br.ufrn.lets.exceptionexpert.models.ReturnMessage;
+import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.ReturnMessage;
 
-public class NullPointerVerifier extends PatternVerifier{
+public class FindByPkVerifier extends PatternVerifier{
 	
-	public NullPointerVerifier(ASTExceptionRepresentation astRep, ILog log) {
+	public FindByPkVerifier(ASTRepresentation astRep, ILog log) {
 		super(astRep, log);
 	}
 
@@ -38,12 +38,13 @@ public class NullPointerVerifier extends PatternVerifier{
 				
 				if(isFindByPKDeclaration(varStmt)) {
 					List<VariableDeclarationFragment> fragments = varStmt.fragments();
-					String varName = fragments.get(0).getName().toString();
 					
-					if(!methodBodyString.contains(varName + " != null") && !methodBodyString.contains(varName + "!=null")) {
+					if(!argumentValidated(fragments.get(0), methodBodyString)) {
 						
 						ReturnMessage rm = new ReturnMessage();
-						rm.setMessage("PROBLEMA");
+						rm.setMessage("Nenhuma validação foi feita se a variável \""  
+								+ fragments.get(0).getName().toString() + "\" é não nula.\n"
+								+ "É aconselhável sempre validar o objeto retornado de um findByPrimaryKey().");
 						rm.setLineNumber(astRep.getAstRoot().getLineNumber(varStmt.getStartPosition()));
 						rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
 						messages.add(rm);

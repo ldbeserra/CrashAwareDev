@@ -1,9 +1,6 @@
 package br.ufrn.lets.crashawaredev.view;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -12,18 +9,23 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
-import org.joda.time.DateTimeUtils;
 
-import br.ufrn.lets.crashawaredev.model.Crash;
 import br.ufrn.lets.crashawaredev.model.ResultConsume;
 import br.ufrn.lets.crashawaredev.model.ResultConsumeItem;
 import br.ufrn.lets.crashawaredev.provider.CrashProvider;
@@ -51,11 +53,11 @@ public class CrashView extends ViewPart {
 	    searchButton.setText("Search");
 	    searchButton.addSelectionListener(new SelectionAdapter() {
 	        public void widgetSelected(SelectionEvent event) {
-	        	search(true);
+	        	search(true, true);
 	        }
         });
 	    
-	    viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
+	    viewer = new TableViewer(parent, SWT.SINGLE | SWT.H_SCROLL
 		        | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 	    
 	    createColumns();
@@ -63,9 +65,50 @@ public class CrashView extends ViewPart {
 	    final Table table = viewer.getTable();
 	    table.setHeaderVisible(true);
 	    table.setLinesVisible(true);
+	    
+	    // Table's line double click
+	    table.addListener(SWT.MouseDoubleClick, event -> {
+	    	if(table.getSelection() != null && table.getSelection().length > 0) {
+		    	TableItem item = table.getSelection()[0];
+		    	if(item != null && item.getData() != null)
+		    		Program.launch(((ResultConsumeItem) item.getData()).getLink());
+	    	}
+	    });
+	    
+	    // Create context menu of table
+	    Menu menuTable = new Menu(table);
+	    table.setMenu(menuTable);
+
+	    // Create menu item
+	    MenuItem miTest = new MenuItem(menuTable, SWT.NONE);
+	    
+	    // Menu open data in external browser
+	    miTest.setText("Open in external browser");
+	    miTest.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {/* nothing to do */ }
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if(table.getSelection() != null && table.getSelection().length > 0) {
+			    	TableItem item = table.getSelection()[0];
+			    	if(item != null && item.getData() != null)
+			    		Program.launch(((ResultConsumeItem) item.getData()).getLink());
+		    	}
+			}
+	    });
+
+	    // Do not show menu, when no item is selected
+	    table.addListener(SWT.MenuDetect, new Listener() {
+	    	@Override
+	    	public void handleEvent(Event event) {
+	    		if (table.getSelectionCount() <= 0) {
+	    			event.doit = false;
+	    		}
+	    	}
+	    });
 
 	    viewer.setContentProvider(ArrayContentProvider.getInstance());
-	    viewer.setInput(CrashProvider.INSTANCE.getCrashes());
 	    getSite().setSelectionProvider(viewer);
 	    
 	    GridData gridData = new GridData();
@@ -78,26 +121,26 @@ public class CrashView extends ViewPart {
 	}
 	
 	private void createColumns() {
-		String[] columns = {"Class", "Trace", "Exception", "Date", "Link"};
-	    int[] bounds = {200, 300, 200, 50, 100};
+		String[] columns = {"Trace", "Exception", "Root Cause", "Date"};
+	    int[] bounds = {400, 120, 200, 200};
 	    
-	    // Class name
+	    // Trace
 	    TableViewerColumn col = createTableViewerColumn(columns[0], bounds[0], 0);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
 	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return "";
+	    		return item.getMensagemExcecao();
 	    	}
 	    });
 	    
-	    // Trace
+	 // Exception
 	    col = createTableViewerColumn(columns[1], bounds[1], 1);
 	    col.setLabelProvider(new ColumnLabelProvider() {
 	    	@Override
 	    	public String getText(Object element) {
 	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return item.getMensagemExcecao();
+	    		return item.getClasseExcecao();
 	    	}
 	    });
 	    
@@ -107,7 +150,7 @@ public class CrashView extends ViewPart {
 	    	@Override
 	    	public String getText(Object element) {
 	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return item.getClasseExcecao();
+	    		return item.getRootCause();
 	    	}
 	    });
 	    
@@ -121,15 +164,6 @@ public class CrashView extends ViewPart {
 	    	}
 	    });
 	    
-	    // Link
-	    col = createTableViewerColumn(columns[4], bounds[4], 4);
-	    col.setLabelProvider(new ColumnLabelProvider() {
-	    	@Override
-	    	public String getText(Object element) {
-	    		ResultConsumeItem item = (ResultConsumeItem) element;
-	    		return "link";
-	    	}
-	    });
 	}
 
 	private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
@@ -143,14 +177,18 @@ public class CrashView extends ViewPart {
 	    return viewerColumn;
 	  }
 	
-	private void search(boolean doLog){
+	public void search(boolean allClasses, boolean doLog){
 		ResultConsume result = null;
 		try {
-			result = CrashProvider.INSTANCE.getCrashesByClassName(searchText.getText());
+			if(allClasses)
+				result = CrashProvider.INSTANCE.getAllCrashes();
+			else
+				result = CrashProvider.INSTANCE.getCrashesByClassName(searchText.getText());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		viewer.setInput(result.getHits());
+		if(result != null)
+			viewer.setInput(result.getHits());
 	}
 
 	@Override

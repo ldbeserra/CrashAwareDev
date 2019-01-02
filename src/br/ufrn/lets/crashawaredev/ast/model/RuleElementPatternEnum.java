@@ -1,4 +1,4 @@
-package br.ufrn.lets.exceptionexpert.models;
+package br.ufrn.lets.crashawaredev.ast.model;
 
 /**
  * The way the element (signaler, handler or exception) is described, in terms of wildcards

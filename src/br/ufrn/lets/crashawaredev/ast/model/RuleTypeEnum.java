@@ -1,4 +1,4 @@
-package br.ufrn.lets.exceptionexpert.models;
+package br.ufrn.lets.crashawaredev.ast.model;
 
 /**
  * Possible types of Rule (full or partial)

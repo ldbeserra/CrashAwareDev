@@ -25,7 +25,7 @@ public class QueryConsumer implements GeradorQueryElasticsearch  {
 	public String gerarQuery() {
 		StringBuilder criteriosConsulta = new StringBuilder();
 		
-		if(exists(searchForm.getClassName()))
+		if(exists(searchForm) && exists(searchForm.getClassName()))
 			criteriosConsulta.append(String.format(TEMPLATE_TERM, "stacktrace", searchForm.getClassName()));
 		
 		return criteriosConsulta.toString();

@@ -8,15 +8,14 @@ import java.util.regex.Pattern;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.internal.ui.text.correction.VarargsWarningsSubProcessor;
 
-import br.ufrn.lets.exceptionexpert.models.ASTExceptionRepresentation;
-import br.ufrn.lets.exceptionexpert.models.MethodRepresentation;
-import br.ufrn.lets.exceptionexpert.models.ReturnMessage;
+import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;
+import br.ufrn.lets.crashawaredev.ast.model.ReturnMessage;
 
 public class HelperVerifier extends PatternVerifier {
 
-	public HelperVerifier(ASTExceptionRepresentation astRep, ILog log) {
+	public HelperVerifier(ASTRepresentation astRep, ILog log) {
 		super(astRep, log);
 	}
 
@@ -27,7 +26,7 @@ public class HelperVerifier extends PatternVerifier {
 		
 		String className = astRep.getTypeDeclaration().getName().toString();
 		
-		if(className.endsWith("Helper")) {
+		if(className.endsWith("Helper") || className.endsWith("Util") || className.endsWith("Utils")) {
 			
 			List<MethodRepresentation> methods = astRep.getMethods();
 			
@@ -41,7 +40,7 @@ public class HelperVerifier extends PatternVerifier {
 					
 					SingleVariableDeclaration var = (SingleVariableDeclaration) param;
 					
-					if(!validateArgument(var, methodBodyString)) {
+					if(!argumentValidated(var, methodBodyString)) {
 						varsToValidate.add(var);
 					}
 				}
@@ -68,28 +67,4 @@ public class HelperVerifier extends PatternVerifier {
 		
 	}
 	
-	private boolean validateArgument(SingleVariableDeclaration var, String methodBody) {
-		
-		// Não vamos validar tipos primitivos, pois não gera null pointer
-		if(var.getType().isPrimitiveType())
-			return true;
-		
-		String varName = var.getName().toString();
-		
-		// Valida se existe checkagem da variável igual ou diferente de null
-		Pattern pattern = Pattern.compile(varName + "\\s*(==|!=)\\s*null");
-		Matcher matcher = pattern.matcher(methodBody);
-		if(matcher.find())
-			return true;
-		
-		// Valida se foi usado o ValidatorUtil para checkar a variável
-		pattern = Pattern.compile("ValidatorUtil\\.is(Not)*Empty\\(\\s*" + varName);
-		matcher = pattern.matcher(methodBody);
-		if(matcher.find())
-			return true;
-		
-		return false;
-		
-	}
-
 }

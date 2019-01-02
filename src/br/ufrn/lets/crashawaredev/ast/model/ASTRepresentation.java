@@ -1,4 +1,4 @@
-package br.ufrn.lets.exceptionexpert.models;
+package br.ufrn.lets.crashawaredev.ast.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-public class ASTExceptionRepresentation {
+public class ASTRepresentation {
 	
 	/**
 	 * Represents the root node of AST. This node represents this class and all of its elements
@@ -28,6 +28,11 @@ public class ASTExceptionRepresentation {
 	 * The methods of the class
 	 */
 	private List<MethodRepresentation> methods;
+	
+	/**
+	 * The fields of the class
+	 */
+	private List<FieldRepresentation> fields;
 	
 	/**
 	 * How many throws statements the class has
@@ -55,8 +60,9 @@ public class ASTExceptionRepresentation {
 		return getNumberOfCatchStatements() > 0;
 	}
 
-	public ASTExceptionRepresentation() {
+	public ASTRepresentation() {
 		methods = new ArrayList<MethodRepresentation>();
+		fields = new ArrayList<FieldRepresentation>();
 	}
 
 	public PackageDeclaration getPackageDeclaration() {
@@ -89,6 +95,14 @@ public class ASTExceptionRepresentation {
 
 	public void setMethods(List<MethodRepresentation> methods) {
 		this.methods = methods;
+	}
+
+	public List<FieldRepresentation> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<FieldRepresentation> fields) {
+		this.fields = fields;
 	}
 
 	public int getNumberOfThrowStatements() {

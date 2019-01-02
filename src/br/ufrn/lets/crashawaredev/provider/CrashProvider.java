@@ -13,24 +13,22 @@ public enum CrashProvider {
 	
 	INSTANCE;
 	
-	private List<Crash> crashes;
-
 	private final String host = "http://elasticsearch-manutencao.info.ufrn.br:9200";
 	
 	public ResultConsume getCrashesByClassName(String className) throws IOException{
 		SearchForm form = new SearchForm();
 		form.setClassName(className);
 		
-		ResultConsume resultConsume = new QueryExecute(host, "indice_log_erro_detalhado_novo_teste-2017", ResultConsume.class, form).executarQueryPlain();
-		return resultConsume;
+//		ResultConsume resultConsume = new QueryExecute(host, "indice_log_erro_detalhado_novo_teste-2017", ResultConsume.class, form).executarQueryPlain();
+//		return resultConsume;
+		return ResultConsume.mock();
 	}
 	
-	private CrashProvider() {
-		crashes = new ArrayList<>();
+	public ResultConsume getAllCrashes() throws IOException{
+		
+//		ResultConsume resultConsume = new QueryExecute(host, "indice_log_erro_detalhado_novo_teste-2017", ResultConsume.class).executarQueryPlain();
+//		return resultConsume;
+		return ResultConsume.mock();
 	}
 	
-	public List<Crash> getCrashes(){
-		return crashes;
-	}
-
 }

@@ -1,4 +1,4 @@
-package br.ufrn.lets.exceptionexpert.models;
+package br.ufrn.lets.crashawaredev.ast.model;
 
 import java.util.HashMap;
 import java.util.Map;

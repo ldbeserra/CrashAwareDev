@@ -56,7 +56,7 @@ public class GetSetPresentVerifier extends PatternVerifier {
 								ReturnMessage rm = new ReturnMessage();
 								rm.setMessage("Variável private sem método get ou set associado.");
 								rm.setLineNumber(astRep.getAstRoot().getLineNumber(field.getFieldDeclaration().getStartPosition()));
-								rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+								rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
 								messages.add(rm);
 							}
 						}

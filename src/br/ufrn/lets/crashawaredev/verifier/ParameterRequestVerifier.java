@@ -42,7 +42,7 @@ public class ParameterRequestVerifier extends PatternVerifier {
 								+ fragments.get(0).getName().toString() + "\" é não nula.\n"	
 								+ "É aconselhável sempre validar se o objeto foi passado corretamente na request.");
 						rm.setLineNumber(astRep.getAstRoot().getLineNumber(varStmt.getStartPosition()));
-						rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+						rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
 						messages.add(rm);
 						
 					}

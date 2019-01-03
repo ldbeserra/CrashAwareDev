@@ -59,7 +59,7 @@ public class HelperVerifier extends PatternVerifier {
 						rm.setMessage("Os argumentos deste método devem ser validados para evitar potenciais null pointers."
 								+ "\nValide cada um dos seguintes argumentos antes de referenciá-los: " + varStr);
 						rm.setLineNumber(astRep.getAstRoot().getLineNumber(method.getMethodDeclaration().getStartPosition()));
-						rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+						rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
 						messages.add(rm);
 					}
 				}

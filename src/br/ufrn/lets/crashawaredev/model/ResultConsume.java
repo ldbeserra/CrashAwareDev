@@ -22,10 +22,10 @@ public class ResultConsume extends SearchResult {
     	for(int i=0 ; i<4 ; i++) {
     	
 	    	Hits item = new Hits();
-//	    	item.setClasseExcecao("ArqException");
-//	    	item.setRootCause("com.sun.star.io.IOException");
-//	    	item.setDataHoraOperacao("December 28th 2018, 15:25:56.033");
-//	    	item.setMensagemExcecao("com.artofsolving.jodconverter.openoffice.connection.OpenOfficeException: conversion failed: could not save output document");
+	    	item.getSource().setClasseExcecao("ArqException");
+	    	item.getSource().setRootCause("com.sun.star.io.IOException"+i);
+	    	item.getSource().setDataHoraOperacao("December 28th 2018, 15:25:56.033");
+	    	item.getSource().setMensagemExcecao("com.artofsolving.jodconverter.openoffice.connection.OpenOfficeException: conversion failed: could not save output document");
 	    	
 	    	mock.getHits().add(item);
     	}

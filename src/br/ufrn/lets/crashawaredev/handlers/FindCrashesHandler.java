@@ -32,18 +32,6 @@ public class FindCrashesHandler implements IHandler{
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
-		
-//		IViewReference viewReferences[] = PlatformUI.getWorkbench()
-//				.getActiveWorkbenchWindow().getActivePage().getViewReferences();
-//		
-//		CrashView crashView;
-//		for(IViewReference ref : viewReferences){
-//			if(ref.getId().equals(CrashView.ID)) {
-//				crashView = (CrashView) ref.getView(true);
-//				crashView.search(true, false);
-//			}
-//		}
-		
 		return null;
 	}
 

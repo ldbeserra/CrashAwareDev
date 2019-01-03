@@ -29,6 +29,13 @@
             class="br.ufrn.lets.crashawaredev.view.CrashView"
             id="br.ufrn.lets.crashawaredev.view.CrashViewId">
       </view>
+      
+      <view
+            name="Exception Information"
+            category="br.ufrn.lets.crashawaredev"
+            class="br.ufrn.lets.crashawaredev.view.InfoExceptionView"
+            id="br.ufrn.lets.crashawaredev.view.InfoExceptionViewId">
+      </view>
 	</extension>
 	
 	<extension
@@ -72,5 +79,33 @@
             commandId="br.ufrn.lets.crashawaredev.view.FindCrashesCommandID">
       	</handler>
     </extension> 
+    
+    <!--<extension
+	      point="org.eclipse.jdt.ui.quickAssistProcessors">
+	   <quickFixProcessor
+	         class="br.ufrn.lets.crashawaredev.handlers.QuickAssistProcessor"
+	         id="br.ufrn.lets.crashawaredev.handlers.QuickAssistProcessorId"
+	         name="My Quick Fix Processor">
+	      <handledMarkerTypes>
+	         <markerType
+	               id="br.ufrn.lets.view.CrashAwareDevId">
+	         </markerType>
+	      </handledMarkerTypes>
+	   </quickFixProcessor>
+	</extension> -->
+	
+	<extension
+	      point="org.eclipse.jdt.ui.quickFixProcessors">
+	   <quickFixProcessor
+	         class="br.ufrn.lets.crashawaredev.handlers.QuickFixProcessor"
+	         id="br.ufrn.lets.crashawaredev.handlers.QuickFixProcessorId"
+	         name="My Quick Fix Processor">
+	      <handledMarkerTypes>
+	         <markerType
+	               id="br.ufrn.lets.view.CrashAwareDevId">
+	         </markerType>
+	      </handledMarkerTypes>
+	   </quickFixProcessor>
+	</extension>
 	
 </plugin>

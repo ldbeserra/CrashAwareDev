@@ -24,11 +24,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import br.ufrn.lets.crashawaredev.model.ResultConsume;
 import br.ufrn.lets.crashawaredev.model.Hits;
-import br.ufrn.lets.crashawaredev.model.SearchForm;
 import br.ufrn.lets.crashawaredev.provider.CrashProvider;
 
 public class CrashView extends ViewPart {
@@ -80,12 +80,11 @@ public class CrashView extends ViewPart {
 	    Menu menuTable = new Menu(table);
 	    table.setMenu(menuTable);
 
-	    // Create menu item
-	    MenuItem miTest = new MenuItem(menuTable, SWT.NONE);
 	    
 	    // Menu open data in external browser
-	    miTest.setText("Open in external browser");
-	    miTest.addSelectionListener(new SelectionListener() {
+	    MenuItem miBrowser = new MenuItem(menuTable, SWT.NONE);
+	    miBrowser.setText("Open in external browser");
+	    miBrowser.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {/* nothing to do */ }
 
@@ -97,6 +96,32 @@ public class CrashView extends ViewPart {
 			    		Program.launch(((Hits) item.getData()).getLink());
 		    	}
 			}
+	    });
+	    
+	    // Menu open exception information
+	    MenuItem miEx = new MenuItem(menuTable, SWT.NONE);
+	    miEx.setText("Show Exception Information");
+	    miEx.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {/* nothing to do */ }
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if(table.getSelection() != null && table.getSelection().length > 0) {
+			    	TableItem item = table.getSelection()[0];
+			    	if(item != null && item.getData() != null) {
+			    		try {
+							InfoExceptionView infoExView = (InfoExceptionView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(InfoExceptionView.ID);
+							infoExView.show(((Hits) item.getData()).getSource().getRootCause());
+						} catch (Exception e) {
+							e.printStackTrace();
+						} 
+			    	}
+		    	}
+				
+			}
+	    	
 	    });
 
 	    // Do not show menu, when no item is selected

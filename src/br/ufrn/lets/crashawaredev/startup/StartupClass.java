@@ -159,7 +159,7 @@ public class StartupClass implements IStartup {
 		String className = astRoot.getPackage().getName() + "." + astRoot.getTypeRoot().getElementName();
 		className = className.substring(0, className.length() - 5); 
 		
-		Long totalCrashes = CrashProvider.INSTANCE.getClassCrashCount(className);
+		Long totalCrashes = 3l;// CrashProvider.INSTANCE.getClassCrashCount(className);
 		
 		if(totalCrashes > 0 && !astRoot.types().isEmpty()) {
 			ReturnMessage rm = new ReturnMessage();

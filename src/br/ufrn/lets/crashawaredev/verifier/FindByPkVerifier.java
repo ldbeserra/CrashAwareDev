@@ -46,7 +46,7 @@ public class FindByPkVerifier extends PatternVerifier{
 								+ fragments.get(0).getName().toString() + "\" é não nula.\n"
 								+ "É aconselhável sempre validar o objeto retornado de um findByPrimaryKey().");
 						rm.setLineNumber(astRep.getAstRoot().getLineNumber(varStmt.getStartPosition()));
-						rm.setMarkerSeverity(IMarker.SEVERITY_WARNING);
+						rm.setMarkerSeverity(IMarker.SEVERITY_INFO);
 						messages.add(rm);
 						
 					}

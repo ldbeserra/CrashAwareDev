@@ -11,19 +11,19 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/guava-15.0.jar"/>
-	<classpathentry kind="lib" path="lib/httpclient-4.3.6.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-4.3.3.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-annotations-2.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-core-2.7.5-sources.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-core-2.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-databind-2.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/javassist-3.19.0-GA.jar"/>
-	<classpathentry kind="lib" path="lib/reflections-0.9.10.jar"/>
-	<classpathentry kind="lib" path="lib/sinfo-arq-data-0.0.49.jar"/>
-	<classpathentry kind="lib" path="lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/sinfo-arq-main-0.0.49.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/guava-15.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.3.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpcore-4.3.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-annotations-2.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-core-2.7.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-core-2.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-databind-2.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javassist-3.19.0-GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/reflections-0.9.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-data-0.0.49.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-main-0.0.49.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

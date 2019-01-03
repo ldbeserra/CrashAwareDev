@@ -110,7 +110,8 @@ public class CrashView extends ViewPart {
 			public void widgetSelected(SelectionEvent arg0) {
 				if(table.getSelection() != null && table.getSelection().length > 0) {
 			    	TableItem item = table.getSelection()[0];
-			    	if(item != null && item.getData() != null) {
+			    	if(item != null && item.getData() != null &&
+			    			((Hits) item.getData()).getSource().getRootCause() != null) {
 			    		try {
 							InfoExceptionView infoExView = (InfoExceptionView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(InfoExceptionView.ID);
 							infoExView.show(((Hits) item.getData()).getSource().getRootCause());

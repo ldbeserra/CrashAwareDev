@@ -16,8 +16,6 @@ import org.eclipse.swt.graphics.Point;
 
 public class QuickFixProcessor implements IQuickFixProcessor {
 
-	// TODO: https://stackoverflow.com/questions/10618164/how-do-i-show-quick-fixes-when-i-hover-over-an-error-in-my-custom-editor
-	
 	@Override
 	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] arg1)
 			throws CoreException {
@@ -48,18 +46,16 @@ public class QuickFixProcessor implements IQuickFixProcessor {
 			
 			@Override
 			public String getDisplayString() {
-				return "SHOW";
+				return "Show Exception Information";
 			}
 			
 			@Override
 			public IContextInformation getContextInformation() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getAdditionalProposalInfo() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			

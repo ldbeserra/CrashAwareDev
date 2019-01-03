@@ -24,7 +24,7 @@ public class QuickAssistProcessor implements IQuickAssistProcessor {
 
 	@Override
 	public boolean hasAssists(IInvocationContext arg0) throws CoreException {
-		return true;
+		return false;
 	}
 	
 	private void addProposal(IInvocationContext context, List<IJavaCompletionProposal> proposals) {

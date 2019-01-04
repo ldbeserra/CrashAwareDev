@@ -7,11 +7,8 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.ILog;
-import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import org.eclipse.jdt.internal.compiler.ast.ReturnStatement;
 
 import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
 import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;

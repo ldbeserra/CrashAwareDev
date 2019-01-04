@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -34,7 +33,6 @@ import org.reflections.Reflections;
 
 import br.ufrn.lets.crashawaredev.ast.ParseAST;
 import br.ufrn.lets.crashawaredev.ast.model.ASTRepresentation;
-import br.ufrn.lets.crashawaredev.ast.model.MethodRepresentation;
 import br.ufrn.lets.crashawaredev.ast.model.ReturnMessage;
 import br.ufrn.lets.crashawaredev.provider.CrashProvider;
 import br.ufrn.lets.crashawaredev.verifier.PatternVerifier;
@@ -46,9 +44,6 @@ public class StartupClass implements IStartup {
 	protected final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	List<ReturnMessage> messages = new ArrayList<ReturnMessage>();
-	
-	// List with projects that do not have a properly configuration, i.e., the contract.xml file configured. 
-	List<IProject> projectsWithoutConfig = new ArrayList<>();
 	
 	//http://stackoverflow.com/questions/28481943/proper-logging-for-eclipse-plug-in-development
 	private ILog log = Activator.getDefault().getLog();
@@ -118,7 +113,6 @@ public class StartupClass implements IStartup {
 								}
 								
 							} catch (CoreException e) {
-						    	log.log(new Status(Status.ERROR, PLUGIN_LOG_IDENTIFIER, "ERROR - The workspace does not have the file /src-gen/contract.xml, with ECL rules. Plug-in aborted. " + e.getLocalizedMessage()));
 								e.printStackTrace();
 								
 							} catch (IOException e) {
@@ -190,16 +184,11 @@ public class StartupClass implements IStartup {
 			}
 		}
 			
-//		//Debug log for statistics metrics
-//	   	log.log(new Status(Status.INFO, PLUGIN_LOG_IDENTIFIER, 
-//	   			"INFO - Changed class: " + compilationUnit.getParent().getElementName() + "." +  compilationUnit.getElementName() +
-//    			" / Total of messages: " + totalMessages +
-//    			" ("+ totalImproperThrowingVerifier + ", " + totalImproperHandlingVerifier + ", " + totalPossibleHandlersInformation + ")" + 
-//	   			" / Project: " + changedClass.getProject().getName() + 
-//    			" / Methods: " + astRep.getMethods().size() +
-//    			" / Throws: " + astRep.getNumberOfThrowStatements() + 
-//    			" / Catches: " + astRep.getNumberOfCatchStatements()
-//	   			));
+		//Debug log for statistics metrics
+	   	log.log(new Status(Status.INFO, PLUGIN_LOG_IDENTIFIER, 
+	   			"INFO - Changed class: " + className +
+    			" / Total of messages: " + messages.size()  
+	   			));
 	   	
 		try {
 			for(ReturnMessage rm : messages) {

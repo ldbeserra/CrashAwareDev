@@ -37,6 +37,7 @@ public class GetSetPresentVerifier extends PatternVerifier {
 	
 							String fieldName = field.getFieldDeclaration().fragments().get(0).toString();
 							String getName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+							String isName  = "is" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 							String setName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 							
 							boolean getFound = false;
@@ -44,7 +45,8 @@ public class GetSetPresentVerifier extends PatternVerifier {
 							
 							for(MethodRepresentation method : astRep.getMethods()) {
 							
-								if(method.getMethodDeclaration().getName().toString().equals(getName))
+								if( method.getMethodDeclaration().getName().toString().equals(getName) ||
+									method.getMethodDeclaration().getName().toString().equals(isName))
 									getFound = true;
 								
 								if(method.getMethodDeclaration().getName().toString().equals(setName))

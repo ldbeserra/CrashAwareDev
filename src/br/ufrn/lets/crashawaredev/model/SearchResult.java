@@ -11,7 +11,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchResult implements Serializable{
 
-    @JsonProperty("total")
+	private static final long serialVersionUID = -6901962794712510186L;
+	
+	@JsonProperty("total")
     private long total;
 
     public SearchResult() {

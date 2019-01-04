@@ -52,7 +52,7 @@ public enum CrashProvider {
 		SearchForm form = new SearchForm();
 		form.setSearchTerm("");
 		form.setSize(20);
-		form.setDays(1000);
+		form.setDays(20);
 		form.setCount(true);
 		
 		ResultConsume resultConsume = new QueryExecute(host, index, ResultConsume.class, form, FIELD_AGGREGATIONS).executarQueryPlain();

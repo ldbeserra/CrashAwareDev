@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResultConsume extends SearchResult {
 
-    @JsonProperty("hits")
+	private static final long serialVersionUID = 1L;
+
+	@JsonProperty("hits")
     private List<Hits> hits = new ArrayList<Hits>();
     
     @JsonProperty("2")

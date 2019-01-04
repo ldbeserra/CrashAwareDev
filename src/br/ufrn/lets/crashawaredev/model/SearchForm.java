@@ -12,11 +12,14 @@ public class SearchForm {
 	
 	private boolean count;
 	
+	private int idSistema;
+	
 	public SearchForm() {
 		this.from = 0;
 		this.size = 0;
 		this.days = 1;
 		this.count = false;
+		this.idSistema = 1;
 	}
 	
 	public String getSearchTerm() {
@@ -59,4 +62,12 @@ public class SearchForm {
 		this.count = count;
 	}
 
+	public int getIdSistema() {
+		return idSistema;
+	}
+
+	public void setIdSistema(int idSistema) {
+		this.idSistema = idSistema;
+	}
+	
 }

@@ -25,5 +25,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-data-elasticsearch-0.0.53-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/sinfo-arq-main-0.0.49.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.4.1212.jre7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

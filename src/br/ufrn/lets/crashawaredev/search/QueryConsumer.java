@@ -5,8 +5,6 @@ import br.ufrn.lets.crashawaredev.model.SearchForm;
 
 public class QueryConsumer implements GeradorQueryElasticsearch  {
 	
-	private final int ID_SISTEMA = 2;
-	
 	private final String TEMPLATE_PAGINATION = "\"from\": %d, \"size\" : %d,\n";
 
 	private final String TEMPLATE_QUERY_FILTER = "{"+
@@ -52,7 +50,7 @@ public class QueryConsumer implements GeradorQueryElasticsearch  {
 	public String gerarQuery() {
 		StringBuilder criteriosConsulta = new StringBuilder();
 		
-		criteriosConsulta.append(String.format(TEMPLATE_TERM, "id_sistema", ID_SISTEMA));
+		criteriosConsulta.append(String.format(TEMPLATE_TERM, "id_sistema", searchForm.getIdSistema()));
 
 		criteriosConsulta.append(String.format(TEMPLATE_FILTER_RANGE, "data_hora_operacao", "now-" + searchForm.getDays() + "d/d", "now+1d/d"));
 		

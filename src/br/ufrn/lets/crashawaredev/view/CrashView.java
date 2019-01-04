@@ -140,7 +140,7 @@ public class CrashView extends ViewPart {
 	    
 	    GridData gridData = new GridData();
 	    gridData.verticalAlignment = GridData.FILL;
-	    gridData.horizontalSpan = 2;
+	    gridData.horizontalSpan = 3;
 	    gridData.grabExcessHorizontalSpace = true;
 	    gridData.grabExcessVerticalSpace = true;
 	    gridData.horizontalAlignment = GridData.FILL;
@@ -149,7 +149,7 @@ public class CrashView extends ViewPart {
 	
 	private void createColumns() {
 		String[] columns = {"Trace", "Exception", "Root Cause", "Date"};
-	    int[] bounds = {400, 120, 200, 200};
+	    int[] bounds = {500, 150, 200, 150};
 	    
 	    // Trace
 	    TableViewerColumn col = createTableViewerColumn(columns[0], bounds[0], 0);
